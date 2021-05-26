@@ -15,7 +15,7 @@ fn main() {
     // 调用 incoming() 方法接收客户端的链接信息，如果有新的信息进来就会返回一个Result枚举，OK(T:TcpStream)
     for stream in listener.incoming() {
         // 如果有客户端链接比如通过： telnet 127.0.0.1 8866 
-        println!("DEBUG::有新的链接进入，这行字就会打印 -------");
+        println!("DEBUG::新链接");
         // 模式匹配
         match stream {
             // 当Result 枚举类型匹配Ok时
@@ -73,10 +73,8 @@ fn handle_client(mut stream: TcpStream) {
         };
 
         if s.len() >= 3 {
-            // 输出终止前的消息。
-            println!("{}.",s);
-            stream.write(b"message printed.\n").unwrap();
-            // 直接跳出 loop 循环，实际上这个链接也就终止了
+            println!("{}.",s);//在server端打印
+            stream.write(b"message printed.\n").unwrap();//echo打印到客户端
             continue;
         }
         // 如果输入的前3个字符串是 bye 则程序终止，为了防止越界所以需要先判断 s.len() >= 3
